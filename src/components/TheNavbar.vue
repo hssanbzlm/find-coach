@@ -1,26 +1,25 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import type {Route} from '@/types/Route'
-const drawer = ref(true);
-const rail = ref(true);
+import { ref } from 'vue'
+import type { Route } from '@/types/Route'
+const drawer = ref(true)
+const rail = ref(true)
 
-const routes:Route[] =[
+const routes: Route[] = [
   {
-  title:'Coaches',
-  path:'/coaches',
-  icon:'mdi-account-group'
+    title: 'Coaches',
+    path: '/coaches',
+    icon: 'mdi-account-group',
   },
   {
-  title:'Requests',
-  path:'/requests',
-  icon:'mdi-message'
-  }
+    title: 'Requests',
+    path: '/requests',
+    icon: 'mdi-message',
+  },
 ]
-
 </script>
 
 <template>
-  <v-card >
+  <v-card>
     <v-layout class="size">
       <v-navigation-drawer
         v-model="drawer"
@@ -52,17 +51,17 @@ const routes:Route[] =[
             :title="item.title"
             :to="item.path"
           >
-        </v-list-item>
+          </v-list-item>
         </v-list>
       </v-navigation-drawer>
       <v-main style="height: 250px">
-       <router-view></router-view>
+        <router-view></router-view>
       </v-main>
     </v-layout>
   </v-card>
 </template>
 <style>
-.v-layout.size{
-height: 100vh;
+.v-layout.size {
+  height: 100vh;
 }
 </style>
