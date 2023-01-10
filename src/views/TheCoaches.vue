@@ -2,20 +2,26 @@
 import CoachDetails from '@/components/CoachDetails.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseChip from '@/components/BaseChip.vue'
-import { coachesList } from '@/data/Coaches'
 import { useRouter } from 'vue-router'
-const coaches = coachesList
+import CoachFilter from '@/components/CoachFilter.vue'
+import { useFilter } from '@/composables/useFilter'
+const { filtred, setFiltred } = useFilter()
 const router = useRouter()
+const updateArea = (areas: string[]) => {
+  setFiltred(areas)
+}
 const clickDetails = () => {
   console.log('click handled')
 }
 const clickContact = (id: string) => {
   router.push({ name: 'contact', params: { coachId: id } })
 }
+
 </script>
 
 <template>
-  <div v-for="coach in coaches" :key="coach.id">
+  <CoachFilter @update-areas="updateArea" />
+  <div v-for="coach in filtred" :key="coach.id">
     <CoachDetails
       :lastName="coach.lastName"
       :firstName="coach.firstName"
@@ -48,6 +54,5 @@ const clickContact = (id: string) => {
     </CoachDetails>
   </div>
 </template>
-
 
 <style scoped></style>
