@@ -7,7 +7,6 @@ const props = defineProps({
 
 <template>
   <div>
-    contact page {{ props.coachId }}
     <ContactForm />
   </div>
 </template>
