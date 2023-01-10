@@ -54,7 +54,7 @@ const routes: Route[] = [
           </v-list-item>
         </v-list>
       </v-navigation-drawer>
-      <v-main style="height: 250px">
+      <v-main class="main-container">
         <router-view></router-view>
       </v-main>
     </v-layout>
@@ -63,5 +63,10 @@ const routes: Route[] = [
 <style>
 .v-layout.size {
   height: 100vh;
+}
+
+.main-container {
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>
