@@ -5,9 +5,11 @@ import BaseChip from '@/components/BaseChip.vue'
 import { useRouter } from 'vue-router'
 import CoachFilter from '@/components/CoachFilter.vue'
 import { useFilter } from '@/composables/useFilter'
+import { chipColor } from '@/utils/utils'
+import type { area } from '@/types/Coach'
 const { filtred, setFiltred } = useFilter()
 const router = useRouter()
-const updateArea = (areas: string[]) => {
+const updateArea = (areas: area[]) => {
   setFiltred(areas)
 }
 const clickDetails = () => {
@@ -16,7 +18,6 @@ const clickDetails = () => {
 const clickContact = (id: string) => {
   router.push({ name: 'contact', params: { coachId: id } })
 }
-
 </script>
 
 <template>
@@ -25,16 +26,20 @@ const clickContact = (id: string) => {
     <CoachDetails
       :lastName="coach.lastName"
       :firstName="coach.firstName"
-      :rate="coach.hourlyRate"
-      class="mt-5"
+      :hourlyRate="coach.hourlyRate"
+      class="ma-5"
     >
       <template v-slot:btn-group>
         <div class="d-flex justify-end">
-          <BaseButton color="primary" @clicked="clickContact(coach.id)">
+          <BaseButton
+            textColor="text-white"
+            color="#385F73"
+            @click="clickContact(coach.id)"
+          >
             Contact me
           </BaseButton>
 
-          <BaseButton color="secondary" @clicked="clickDetails" class="ml-1">
+          <BaseButton color="#E1F5FE" @click="clickDetails" class="ml-1">
             View details
           </BaseButton>
         </div>
@@ -43,7 +48,7 @@ const clickContact = (id: string) => {
         <BaseChip
           v-for="area in coach.areas"
           :key="area"
-          color="red"
+          :color="chipColor(area)"
           text-color="white"
         >
           <template v-slot:chip-text>
