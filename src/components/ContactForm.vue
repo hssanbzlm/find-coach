@@ -21,10 +21,10 @@ const cancelRequest = () => {
 </script>
 
 <template>
-  <v-form>
+  <v-form class="mt-5 form">
     <v-container>
       <v-row>
-        <v-col cols="4">
+        <v-col cols="12">
           <v-text-field
             class="email-field"
             @input="v$.email.$touch"
@@ -38,7 +38,7 @@ const cancelRequest = () => {
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="4">
+        <v-col cols="12">
           <v-textarea
             v-model="state.message"
             @input="v$.message.$touch"
@@ -55,11 +55,21 @@ const cancelRequest = () => {
         </v-col>
       </v-row>
 
-      <v-row>
+      <v-row no-gutters>
         <v-col>
-          <BaseButton color="green" @clicked="sendRequest">Contact</BaseButton>
-          <BaseButton color="yellow" @clicked="cancelRequest" class="ml-2"
-            >Cancel request</BaseButton
+          <BaseButton
+            class="ma-2"
+            color="#0277BD"
+            textColor="text-white"
+            @click="sendRequest"
+            >Send</BaseButton
+          >
+          <BaseButton
+            class="ma-2"
+            color="#757575"
+            textColor="text-white"
+            @click="cancelRequest"
+            >Cancel</BaseButton
           >
         </v-col>
       </v-row>
@@ -72,5 +82,8 @@ const cancelRequest = () => {
   color: red;
   font-size: 0.8em;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.form {
+  width: 35vw;
 }
 </style>

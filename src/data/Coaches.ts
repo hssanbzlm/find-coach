@@ -1,4 +1,6 @@
-export const coachesList = [
+import type { Coach } from '@/types/Coach'
+
+export const coachesList: Coach[] = [
   {
     id: 'c1',
     firstName: 'Maximilian',

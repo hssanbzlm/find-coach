@@ -9,7 +9,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  rate: {
+  hourlyRate: {
     type: Number,
     required: true,
   },
@@ -18,17 +18,17 @@ const props = defineProps({
 const name = computed(() => {
   return `${props.firstName} ${props.lastName}`
 })
-const hourlyRate = computed(() => {
-  return `${props.rate}$/hour`
+const fullHourlyRate = computed(() => {
+  return `${props.hourlyRate}$/hour`
 })
 </script>
 
 <template>
-  <div class="d-flex align-center flex-column">
+  <div class="d-flex align-center flex-column mt-5">
     <v-card width="500">
       <v-card-item>
         <v-card-title>{{ name }}</v-card-title>
-        <v-card-subtitle>{{ hourlyRate }}</v-card-subtitle>
+        <v-card-subtitle>{{ fullHourlyRate }}</v-card-subtitle>
         <slot name="areas"></slot>
         <slot name="btn-group"></slot>
       </v-card-item>
