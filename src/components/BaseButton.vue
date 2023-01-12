@@ -1,15 +1,18 @@
 <script setup lang="ts">
 const props = defineProps({
   color: String,
+  textColor: String,
 })
-const emits = defineEmits(['clicked'])
-const onclick = () => {
-  emits('clicked')
-}
+console.log('color ', props.color)
 </script>
 
 <template>
-  <v-btn height="25" @click="onclick" rounded="lg" :color="props.color">
+  <v-btn
+    :class="`${props.textColor}`"
+    height="25"
+    rounded="lg"
+    :color="props.color"
+  >
     <slot></slot>
   </v-btn>
 </template>
