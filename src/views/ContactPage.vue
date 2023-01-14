@@ -2,7 +2,7 @@
 import CoachDetails from '@/components/CoachDetails.vue'
 import ContactForm from '@/components/ContactForm.vue'
 import { coachesList } from '@/data/Coaches'
-import type { Coach } from '@/types/Coach';
+import type { Coach } from '@/types/Coach'
 const props = defineProps({
   coachId: String,
 })
