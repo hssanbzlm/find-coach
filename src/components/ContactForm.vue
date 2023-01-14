@@ -3,6 +3,7 @@ import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import BaseButton from './BaseButton.vue'
+import { useRouter } from 'vue-router';
 const state = reactive({
   message: '',
   email: '',
@@ -12,11 +13,12 @@ const rules = {
   email: { required, email },
 }
 const v$ = useVuelidate(rules, state)
+const router = useRouter()
 const sendRequest = () => {
   console.log('vuelidate ', v$.value.email)
 }
 const cancelRequest = () => {
-  console.log('request canceled')
+  router.back()
 }
 </script>
 
