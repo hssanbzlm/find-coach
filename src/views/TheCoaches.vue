@@ -4,13 +4,26 @@ import BaseButton from '@/components/BaseButton.vue'
 import BaseChip from '@/components/BaseChip.vue'
 import { useRouter } from 'vue-router'
 import CoachFilter from '@/components/CoachFilter.vue'
-import { useFilter } from '@/composables/useFilter'
 import { chipColor } from '@/utils/utils'
-import type { area } from '@/types/Coach'
-const { filtred, setFiltred } = useFilter()
+import type { area, Coach } from '@/types/Coach'
+import { useCoachesStore } from '@/stores/Coaches'
+import { onMounted, computed, ref } from 'vue'
+const areas = ref(['frontend', 'backend', 'career'])
 const router = useRouter()
-const updateArea = (areas: area[]) => {
-  setFiltred(areas)
+const store = useCoachesStore()
+onMounted(() => {
+  store.fetchCoaches()
+})
+const getCoaches = computed(() => {
+  return store.getCoachesState
+})
+const filtredCoaches = computed(() => {
+  return getCoaches.value.filter((coach: Coach) => {
+    return coach.areas.some((area: area) => areas.value.includes(area))
+  })
+})
+const updateArea = (area: area[]) => {
+  areas.value = area
 }
 const clickDetails = () => {
   console.log('click handled')
@@ -27,7 +40,7 @@ const signOut = () => {
 <template>
   <div @click="signOut">signout</div>
   <CoachFilter @update-areas="updateArea" />
-  <div v-for="coach in filtred" :key="coach.id">
+  <div v-for="coach in filtredCoaches" :key="coach.id">
     <CoachDetails
       :lastName="coach.lastName"
       :firstName="coach.firstName"

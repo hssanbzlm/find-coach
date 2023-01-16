@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import CoachDetails from '@/components/CoachDetails.vue'
 import ContactForm from '@/components/ContactForm.vue'
-import { coachesList } from '@/data/Coaches'
-import type { Coach } from '@/types/Coach'
+import { useCoachesStore } from '@/stores/Coaches'
+const coachStore = useCoachesStore()
+const getCoachById = coachStore.getCoachById
 const props = defineProps({
-  coachId: String,
+  coachId: { type: String, required: true },
 })
 
-const { lastName, firstName, hourlyRate } = coachesList.find(
-  (coach) => coach.id == props.coachId
-) as Coach
+const { lastName, firstName, hourlyRate } = getCoachById(props.coachId)
 </script>
 
 <template>
