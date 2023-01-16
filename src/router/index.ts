@@ -9,7 +9,7 @@ const router = createRouter({
     {
       name: 'Auth',
       path: '/auth',
-      component: AuthPage,
+      component: () => import('@/views/AuthPage.vue'),
       beforeEnter: (to, from) => {
         if (localStorage.getItem('ID') != null)
           return {
@@ -23,13 +23,14 @@ const router = createRouter({
       children: [
         {
           name: 'coaches',
-          path: 'coaches',
+          path: '/coaches',
+          alias: '/',
           component: TheCoaches,
         },
         {
           name: 'contact',
           path: '/coaches/:coachId/contact',
-          component: ContactPage,
+          component: () => import('@/views/ContactPage.vue'),
           props: true,
         },
         {
