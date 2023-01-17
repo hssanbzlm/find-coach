@@ -3,7 +3,6 @@ const props = defineProps({
   color: String,
   textColor: String,
 })
-console.log('color ', props.color)
 </script>
 
 <template>
