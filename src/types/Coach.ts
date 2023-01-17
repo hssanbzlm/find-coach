@@ -7,4 +7,5 @@ export type Coach = {
   areas: area[]
   description: string
   hourlyRate: number
+  email: string
 }

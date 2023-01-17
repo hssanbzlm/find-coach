@@ -7,10 +7,8 @@ const getCoachById = coachStore.getCoachById
 const props = defineProps({
   coachId: { type: String, required: true },
 })
-
-const { lastName, firstName, hourlyRate } = getCoachById(props.coachId)
+const { lastName, firstName, hourlyRate, email } = getCoachById(props.coachId)
 </script>
-
 <template>
   <div class="d-flex flex-column align-center">
     <CoachDetails
@@ -18,7 +16,7 @@ const { lastName, firstName, hourlyRate } = getCoachById(props.coachId)
       :lastName="lastName"
       :hourlyRate="hourlyRate"
     />
-    <ContactForm />
+    <ContactForm :coachDetails="{ email, firstName, lastName }" />
   </div>
 </template>
 

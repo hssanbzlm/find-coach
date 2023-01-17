@@ -1,21 +1,32 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
+import { required } from '@vuelidate/validators'
 import BaseButton from './BaseButton.vue'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
+import { sendEmail } from '@/plugins/email'
+type CoachDetailsShape = {
+  firstName: string
+  lastName: string
+  email: string
+}
+const props = defineProps<{ coachDetails: CoachDetailsShape }>()
+const router = useRouter()
 const state = reactive({
   message: '',
-  email: '',
 })
 const rules = {
   message: { required },
-  email: { required, email },
 }
 const v$ = useVuelidate(rules, state)
-const router = useRouter()
 const sendRequest = () => {
-  console.log('vuelidate ', v$.value.email)
+  sendEmail(
+    `${props.coachDetails.lastName} ${props.coachDetails.firstName}`,
+    state.message,
+    props.coachDetails.email
+  )
+    .then((v) => console.log('resultat ', v))
+    .catch((err) => console.log('err', err))
 }
 const cancelRequest = () => {
   router.back()
@@ -29,14 +40,10 @@ const cancelRequest = () => {
         <v-col cols="12">
           <v-text-field
             class="email-field"
-            @input="v$.email.$touch"
-            v-model="state.email"
+            :model-value="coachDetails.email"
+            disabled
             label="E-mail"
-            required
           ></v-text-field>
-          <div class="input-errors" v-if="v$.email.$invalid && v$.email.$dirty">
-            <span class="error-msg">Please put a valid email</span>
-          </div>
         </v-col>
       </v-row>
       <v-row>
