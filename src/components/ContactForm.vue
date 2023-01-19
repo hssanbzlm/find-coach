@@ -5,7 +5,9 @@ import { required } from '@vuelidate/validators'
 import BaseButton from './BaseButton.vue'
 import { useRouter } from 'vue-router'
 import { sendEmail } from '@/plugins/email'
+import axios from 'axios'
 type CoachDetailsShape = {
+  id: string
   firstName: string
   lastName: string
   email: string
@@ -25,7 +27,22 @@ const sendRequest = () => {
     state.message,
     props.coachDetails.email
   )
-    .then((v) => console.log('resultat ', v))
+    .then((result) => {
+      axios
+        .post(import.meta.env.VITE_DB_URL + '/requests.json', {
+          sender: localStorage.getItem('ID'),
+          coachId: props.coachDetails.id,
+          message: state.message,
+          time: Date.now(),
+        })
+        .then((result) => {
+          console.log('success')
+          router.push({ name: 'coaches' })
+        })
+        .catch((err) => {
+          console.log('err ', err)
+        })
+    })
     .catch((err) => console.log('err', err))
 }
 const cancelRequest = () => {
