@@ -11,7 +11,10 @@ import { ref } from 'vue'
 import { useCoachesStore } from '@/stores/Coaches'
 import type { Request } from '@/types/Request'
 import RequestTimeline from '@/components/RequestTimeline.vue'
+import { useUserStore } from '@/stores/User'
 const coacheStore = useCoachesStore()
+const userStore = useUserStore()
+const { email } = userStore.getUser!
 
 const getCoachDetails = (coachId: string) => {
   const { firstName, lastName } = coacheStore.getCoachById(coachId)
@@ -24,7 +27,7 @@ const requests = ref<Request[]>([])
 const requestQuery = query(
   firebaseRef(db, 'requests/'),
   orderByChild('sender'),
-  equalTo(localStorage.getItem('ID'))
+  equalTo(email as string)
 )
 get(requestQuery)
   .then((snapshot) => {

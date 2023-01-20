@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Route } from '@/types/Route'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/User'
+import { getAuth } from '@firebase/auth'
+
 const drawer = ref(true)
 const rail = ref(true)
-
+const router = useRouter()
+const userStore = useUserStore()
+const { displayName, photoURL } = userStore.getUser!
 const routes: Route[] = [
   {
     title: 'Coaches',
@@ -16,6 +22,16 @@ const routes: Route[] = [
     icon: 'mdi-message',
   },
 ]
+
+const logout = () => {
+  userStore.setUser(null)
+  getAuth()
+    .signOut()
+    .then(() => {
+      console.log('you are logged out')
+    })
+  router.push({ name: 'Auth' })
+}
 </script>
 
 <template>
@@ -27,11 +43,7 @@ const routes: Route[] = [
         permanent
         @click="rail = false"
       >
-        <v-list-item
-          prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
-          title="John Leider"
-          nav
-        >
+        <v-list-item :prepend-avatar="photoURL" :title="displayName" nav>
           <template v-slot:append>
             <v-btn
               variant="text"
@@ -50,6 +62,13 @@ const routes: Route[] = [
             :prepend-icon="item.icon"
             :title="item.title"
             :to="item.path"
+            @click="item.fn"
+          >
+          </v-list-item>
+          <v-list-item
+            prepend-icon="mdi-account-off-outline"
+            title="Logout"
+            @click="logout"
           >
           </v-list-item>
         </v-list>

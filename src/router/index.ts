@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import TheCoaches from '@/views/TheCoaches.vue'
-import ContactPage from '@/views/ContactPage.vue'
-import AuthPage from '@/views/AuthPage.vue'
 import TheNavbarVue from '@/components/TheNavbar.vue'
+import { useUserStore } from '@/stores/User'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -10,12 +9,6 @@ const router = createRouter({
       name: 'Auth',
       path: '/auth',
       component: () => import('@/views/AuthPage.vue'),
-      beforeEnter: (to, from) => {
-        if (localStorage.getItem('ID') != null)
-          return {
-            name: 'coaches',
-          }
-      },
     },
     {
       path: '/',
@@ -45,7 +38,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-  if (to.meta.requiresAuth && localStorage.getItem('ID') === null) {
+  const userStore = useUserStore()
+  console.log('getUser in beforeEach ', userStore.getUser)
+
+  if (to.meta.requiresAuth && userStore.getUser === null) {
     return {
       path: '/auth',
     }

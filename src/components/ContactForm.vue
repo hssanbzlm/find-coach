@@ -6,6 +6,7 @@ import BaseButton from './BaseButton.vue'
 import { useRouter } from 'vue-router'
 import { sendEmail } from '@/plugins/email'
 import axios from 'axios'
+import { useUserStore } from '@/stores/User'
 type CoachDetailsShape = {
   id: string
   firstName: string
@@ -14,6 +15,7 @@ type CoachDetailsShape = {
 }
 const props = defineProps<{ coachDetails: CoachDetailsShape }>()
 const router = useRouter()
+const userStore = useUserStore()
 const state = reactive({
   message: '',
 })
@@ -27,16 +29,16 @@ const sendRequest = () => {
     state.message,
     props.coachDetails.email
   )
-    .then((result) => {
+    .then(() => {
+      const { email } = userStore.getUser!
       axios
         .post(import.meta.env.VITE_DB_URL + '/requests.json', {
-          sender: localStorage.getItem('ID'),
+          sender: email,
           coachId: props.coachDetails.id,
           message: state.message,
           time: Date.now(),
         })
-        .then((result) => {
-          console.log('success')
+        .then(() => {
           router.push({ name: 'coaches' })
         })
         .catch((err) => {
