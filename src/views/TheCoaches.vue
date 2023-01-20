@@ -29,14 +29,9 @@ const clickDetails = () => {
 const clickContact = (id: string) => {
   router.push({ name: 'contact', params: { coachId: id } })
 }
-const signOut = () => {
-  localStorage.removeItem('ID')
-  router.push({ name: 'Auth' })
-}
 </script>
 
 <template>
-  <div @click="signOut">signout</div>
   <CoachFilter @update-areas="updateArea" />
   <div v-for="coach in filtredCoaches" :key="coach.id">
     <CoachDetails
