@@ -39,8 +39,6 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   const userStore = useUserStore()
-  console.log('getUser in beforeEach ', userStore.getUser)
-
   if (to.meta.requiresAuth && userStore.getUser === null) {
     return {
       path: '/auth',
