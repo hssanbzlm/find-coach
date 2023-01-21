@@ -24,13 +24,11 @@ const routes: Route[] = [
 ]
 
 const logout = () => {
-  userStore.setUser(null)
   getAuth()
     .signOut()
     .then(() => {
-      console.log('you are logged out')
+      router.push({ name: 'Auth' })
     })
-  router.push({ name: 'Auth' })
 }
 </script>
 
