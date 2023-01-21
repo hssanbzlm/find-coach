@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, onMounted, ref} from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import BaseButton from './BaseButton.vue'
@@ -16,6 +16,10 @@ type CoachDetailsShape = {
 const props = defineProps<{ coachDetails: CoachDetailsShape }>()
 const router = useRouter()
 const userStore = useUserStore()
+const textArea = ref()
+onMounted(() => {
+  textArea.value.focus()
+})
 const state = reactive({
   message: '',
 })
@@ -73,6 +77,7 @@ const cancelRequest = () => {
             :counter="100"
             label="Message"
             required
+            ref="textArea"
           ></v-textarea>
           <div
             class="input-errors"
