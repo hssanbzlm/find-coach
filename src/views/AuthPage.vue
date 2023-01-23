@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { useRouter } from 'vue-router'
-import BaseButton from '@/components/BaseButton.vue'
 import { useUserStore } from '@/stores/User'
 import type { User } from '@/types/User'
 const router = useRouter()
