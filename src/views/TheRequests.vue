@@ -24,6 +24,8 @@ const getRequestTime = (timestamp: number) => {
   return new Date(timestamp)
 }
 const requests = ref<Request[]>([])
+const loading = ref(true)
+const error = ref(false)
 const requestQuery = query(
   firebaseRef(db, 'requests/'),
   orderByChild('sender'),
@@ -31,34 +33,45 @@ const requestQuery = query(
 )
 get(requestQuery)
   .then((snapshot) => {
+    loading.value = false
     if (snapshot.size > 0) {
       snapshot.forEach((childSnapshot) => {
         requests.value.push(childSnapshot.val())
       })
     }
   })
-  .catch((err) => {
-    console.log('err ', err)
+  .catch(() => {
+    loading.value = false
+    error.value = true
   })
 </script>
 <template>
-  <v-timeline>
-    <RequestTimeline
-      v-for="request in requests"
-      dot-color="purple-lighten-2"
-      fill-dot
-      :key="request.coachId"
-    >
-      <template v-slot:coach-name>
-        {{ getCoachDetails(request.coachId) }}
-      </template>
-      <template v-slot:date>
-        {{ getRequestTime(request.time) }}
-      </template>
-      <template v-slot:message>
-        {{ request.message }}
-      </template>
-    </RequestTimeline>
-  </v-timeline>
+  <div v-if="!loading && !error">
+    <v-timeline v-if="requests.length > 0">
+      <RequestTimeline
+        v-for="request in requests"
+        dot-color="purple-lighten-2"
+        fill-dot
+        :key="request.coachId"
+      >
+        <template v-slot:coach-name>
+          {{ getCoachDetails(request.coachId) }}
+        </template>
+        <template v-slot:date>
+          {{ getRequestTime(request.time) }}
+        </template>
+        <template v-slot:message>
+          {{ request.message }}
+        </template>
+      </RequestTimeline>
+    </v-timeline>
+    <div v-else>you havent sent yet any request!</div>
+  </div>
+  <div v-else>
+    <div v-if="loading">
+      <ProgressCircular />
+    </div>
+    <div v-if="error">Error</div>
+  </div>
 </template>
 <style scoped></style>

@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import { reactive, onMounted, ref} from 'vue'
+import { reactive, onMounted, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import BaseButton from './BaseButton.vue'
 import { useRouter } from 'vue-router'
 import { sendEmail } from '@/plugins/email'
 import axios from 'axios'
 import { useUserStore } from '@/stores/User'
+import BaseAlert from './BaseAlert.vue'
 type CoachDetailsShape = {
   id: string
   firstName: string
   lastName: string
   email: string
 }
+const requestSent = ref(false)
+const requestError = ref(false)
+const requestLoading = ref(false)
 const props = defineProps<{ coachDetails: CoachDetailsShape }>()
 const router = useRouter()
 const userStore = useUserStore()
@@ -28,6 +31,9 @@ const rules = {
 }
 const v$ = useVuelidate(rules, state)
 const sendRequest = () => {
+  requestLoading.value = true
+  requestError.value = false
+  requestSent.value = false
   sendEmail(
     `${props.coachDetails.lastName} ${props.coachDetails.firstName}`,
     state.message,
@@ -43,13 +49,20 @@ const sendRequest = () => {
           time: Date.now(),
         })
         .then(() => {
+          requestLoading.value = false
+          requestSent.value = true
+          requestError.value = false
           router.push({ name: 'coaches' })
         })
-        .catch((err) => {
-          console.log('err ', err)
+        .catch(() => {
+          requestLoading.value = false
+          requestError.value = true
         })
     })
-    .catch((err) => console.log('err', err))
+    .catch(() => {
+      requestLoading.value = false
+      requestError.value = true
+    })
 }
 const cancelRequest = () => {
   router.back()
@@ -108,6 +121,18 @@ const cancelRequest = () => {
       </v-row>
     </v-container>
   </v-form>
+  <div v-if="requestSent">
+    <BaseAlert message="your request has been sent" type="success" />
+  </div>
+  <div v-if="requestLoading">
+    <BaseAlert message="your request is being sent" type="info" />
+  </div>
+  <div v-if="requestError">
+    <BaseAlert
+      message="An error occured while sending your request"
+      type="error"
+    />
+  </div>
 </template>
 
 <style scoped>
