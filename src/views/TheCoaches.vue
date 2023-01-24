@@ -11,7 +11,11 @@ const areas = ref(['frontend', 'backend', 'career'])
 const router = useRouter()
 const store = useCoachesStore()
 const coachStore = useCoachesStore()
-if (coachStore.loaded == false) coachStore.fetchCoaches()
+const page = ref(1)
+const pageSize = 3
+if (coachStore.loaded == false) {
+  coachStore.fetchCoaches()
+}
 
 const getCoaches = computed(() => {
   return store.getCoachesState
@@ -20,6 +24,15 @@ const filtredCoaches = computed(() => {
   return getCoaches.value.filter((coach: Coach) => {
     return coach.areas.some((area: area) => areas.value.includes(area))
   })
+})
+const length = computed(() => {
+  return Math.ceil(filtredCoaches.value.length / pageSize)
+})
+let showedCoaches = computed(() => {
+  return filtredCoaches.value.slice(
+    pageSize * page.value - pageSize,
+    pageSize * page.value
+  )
 })
 const updateArea = (area: area[]) => {
   areas.value = area
@@ -35,13 +48,16 @@ const clickContact = (id: string) => {
 <template>
   <div v-if="coachStore.loaded">
     <CoachFilter @update-areas="updateArea" />
-    <div v-for="coach in filtredCoaches" :key="coach.id">
+    <div v-for="coach in showedCoaches" :key="coach.id">
       <CoachDetails
         :lastName="coach.lastName"
         :firstName="coach.firstName"
         :hourlyRate="coach.hourlyRate"
         class="ma-5"
       >
+        <template v-slot:image v-if="coach.img">
+          <img :src="coach.img" alt="Coach image" width="50" height="45" />
+        </template>
         <template v-slot:btn-group>
           <div class="d-flex justify-end">
             <BaseButton
@@ -70,6 +86,13 @@ const clickContact = (id: string) => {
           </BaseChip>
         </template>
       </CoachDetails>
+    </div>
+    <div class="text-center">
+      <v-pagination
+        v-model="page"
+        :length="length"
+        v-if="filtredCoaches.length > pageSize"
+      ></v-pagination>
     </div>
   </div>
   <div v-else>
