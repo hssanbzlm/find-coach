@@ -27,7 +27,11 @@ const fullHourlyRate = computed(() => {
   <div class="d-flex align-center flex-column mt-5">
     <v-card width="500">
       <v-card-item>
-        <v-card-title>{{ name }}</v-card-title>
+        <div class="d-flex justify-space-between">
+          <v-card-title>{{ name }}</v-card-title>
+          <slot name="image"></slot>
+
+        </div>
         <v-card-subtitle>{{ fullHourlyRate }}</v-card-subtitle>
         <slot name="areas"></slot>
         <slot name="btn-group"></slot>

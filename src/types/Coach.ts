@@ -8,4 +8,5 @@ export type Coach = {
   description: string
   hourlyRate: number
   email: string
+  img?: string
 }
