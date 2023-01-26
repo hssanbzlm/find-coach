@@ -1,25 +1,23 @@
 <script setup lang="ts">
-import { reactive, onMounted, ref } from 'vue'
+import { reactive, onMounted, ref, onUpdated } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
-import { sendEmail } from '@/plugins/email'
-import axios from 'axios'
 import { useUserStore } from '@/stores/User'
 import BaseAlert from './BaseAlert.vue'
+import { useSendEmail } from '@/composables/useSendEmail'
 type CoachDetailsShape = {
   id: string
   firstName: string
   lastName: string
   email: string
 }
-const requestSent = ref(false)
-const requestError = ref(false)
-const requestLoading = ref(false)
 const props = defineProps<{ coachDetails: CoachDetailsShape }>()
 const router = useRouter()
 const userStore = useUserStore()
 const textArea = ref()
+const { email } = userStore.getUser!
+
 onMounted(() => {
   textArea.value.focus()
 })
@@ -29,40 +27,20 @@ const state = reactive({
 const rules = {
   message: { required },
 }
+const { isError, isSentError, isSentLoading, isSuccess, executeSendEmail } =
+  useSendEmail()
 const v$ = useVuelidate(rules, state)
+onUpdated(() => {
+  if (isSuccess.value) router.push({ name: 'coaches' })
+})
 const sendRequest = () => {
-  requestLoading.value = true
-  requestError.value = false
-  requestSent.value = false
-  sendEmail(
+  executeSendEmail(
     `${props.coachDetails.lastName} ${props.coachDetails.firstName}`,
+    props.coachDetails.email,
     state.message,
-    props.coachDetails.email
+    email,
+    props.coachDetails.id
   )
-    .then(() => {
-      const { email } = userStore.getUser!
-      axios
-        .post(import.meta.env.VITE_DB_URL + '/requests.json', {
-          sender: email,
-          coachId: props.coachDetails.id,
-          message: state.message,
-          time: Date.now(),
-        })
-        .then(() => {
-          requestLoading.value = false
-          requestSent.value = true
-          requestError.value = false
-          router.push({ name: 'coaches' })
-        })
-        .catch(() => {
-          requestLoading.value = false
-          requestError.value = true
-        })
-    })
-    .catch(() => {
-      requestLoading.value = false
-      requestError.value = true
-    })
 }
 const cancelRequest = () => {
   router.back()
@@ -121,13 +99,13 @@ const cancelRequest = () => {
       </v-row>
     </v-container>
   </v-form>
-  <div v-if="requestSent">
+  <div v-if="isSuccess">
     <BaseAlert message="your request has been sent" type="success" />
   </div>
-  <div v-if="requestLoading">
+  <div v-if="isSentLoading && !isSuccess && !isError && !isSentError">
     <BaseAlert message="your request is being sent" type="info" />
   </div>
-  <div v-if="requestError">
+  <div v-if="isError || isSentError">
     <BaseAlert
       message="An error occured while sending your request"
       type="error"
