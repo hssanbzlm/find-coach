@@ -15,6 +15,7 @@
     "@mdi/font": "^7.1.96",
     "@vuelidate/core": "^2.0.0",
     "@vuelidate/validators": "^2.0.0",
+    "@vueuse/core": "^9.11.1",
     "axios": "^1.2.2",
     "emailjs-com": "^3.2.0",
     "firebase": "^9.15.0",

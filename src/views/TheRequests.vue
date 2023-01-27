@@ -12,6 +12,8 @@ import { useCoachesStore } from '@/stores/Coaches'
 import type { Request } from '@/types/Request'
 import RequestTimeline from '@/components/RequestTimeline.vue'
 import { useUserStore } from '@/stores/User'
+import { useDateFormat } from '@vueuse/core'
+
 const coacheStore = useCoachesStore()
 const userStore = useUserStore()
 const { email } = userStore.getUser!
@@ -21,7 +23,7 @@ const getCoachDetails = (coachId: string) => {
   return `${firstName} ${lastName}`
 }
 const getRequestTime = (timestamp: number) => {
-  return new Date(timestamp)
+  return useDateFormat(new Date(timestamp), 'DD-MM-YYYY hh:mm:ss A').value
 }
 const requests = ref<Request[]>([])
 const loading = ref(true)
@@ -38,6 +40,7 @@ get(requestQuery)
       snapshot.forEach((childSnapshot) => {
         requests.value.push(childSnapshot.val())
       })
+      requests.value.reverse()
     }
   })
   .catch(() => {
