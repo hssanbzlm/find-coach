@@ -1,13 +1,15 @@
-import axios from 'axios'
-import { ref } from 'vue'
-export function usePost(url: string) {
+import type { IDataBase } from '@/db/IDataBase'
+import { ref, inject } from 'vue'
+export function usePost() {
   const isLoading = ref(false)
   const isError = ref(false)
   const isSuccess = ref(false)
+  const appDataBase: IDataBase = inject('appDataBase')!
+
   const executePostRequest = (data: Object) => {
     isLoading.value = true
-    axios
-      .post(url, data)
+    appDataBase
+      .addRequest(data)
       .then((response) => {
         isLoading.value = false
         response.status === 200

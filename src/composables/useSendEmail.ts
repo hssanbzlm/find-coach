@@ -4,9 +4,7 @@ import { ref } from 'vue'
 export function useSendEmail() {
   const isSentError = ref(false)
   const isSentLoading = ref(false)
-  const { executePostRequest, isSuccess, isError } = usePost(
-    import.meta.env.VITE_DB_URL + '/requests.json'
-  )
+  const { executePostRequest, isSuccess, isError } = usePost()
 
   const executeSendEmail = (
     to_name: string,

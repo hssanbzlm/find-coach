@@ -1,22 +1,17 @@
 <script setup lang="ts">
-import {
-  db,
-  ref as firebaseRef,
-  query,
-  get,
-  equalTo,
-  orderByChild,
-} from '@/plugins/firebase'
 import { ref } from 'vue'
 import { useCoachesStore } from '@/stores/Coaches'
 import type { Request } from '@/types/Request'
 import RequestTimeline from '@/components/RequestTimeline.vue'
 import { useUserStore } from '@/stores/User'
 import { useDateFormat } from '@vueuse/core'
-
+import { inject } from 'vue'
+import type { IDataBase } from '@/db/IDataBase'
+import type { DataSnapshot } from '@firebase/database'
 const coacheStore = useCoachesStore()
 const userStore = useUserStore()
 const { email } = userStore.getUser!
+const appDataBase: IDataBase = inject('appDataBase')!
 
 const getCoachDetails = (coachId: string) => {
   const { firstName, lastName } = coacheStore.getCoachById(coachId)
@@ -28,13 +23,9 @@ const getRequestTime = (timestamp: number) => {
 const requests = ref<Request[]>([])
 const loading = ref(true)
 const error = ref(false)
-const requestQuery = query(
-  firebaseRef(db, 'requests/'),
-  orderByChild('sender'),
-  equalTo(email as string)
-)
-get(requestQuery)
-  .then((snapshot) => {
+appDataBase
+  .getRequests(email)
+  .then((snapshot: DataSnapshot) => {
     loading.value = false
     if (snapshot.size > 0) {
       snapshot.forEach((childSnapshot) => {
