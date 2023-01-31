@@ -10,10 +10,9 @@ import { useUserStore } from './stores/User'
 import type { User } from './types/User'
 import BaseButton from '@/components/BaseButton.vue'
 import ProgressCircular from '@/components/ProgressCircular.vue'
-import { DbManager } from './db/DbManager'
-import { FirebaseDb } from './db/FirebaseDb'
-const firebaseDataBase = new FirebaseDb()
-const databaseManager = new DbManager(firebaseDataBase)
+import { ConcreteFirebaseCreator } from './db/ConcreteFirebaseCreator'
+const firebaseCreator = new ConcreteFirebaseCreator()
+const appDataBase = firebaseCreator.factoryMethod()
 const app = createApp(App)
 app.use(createPinia())
 const userStore = useUserStore()
@@ -21,7 +20,7 @@ app.use(vuetify)
 app.use(router)
 app.component('BaseButton', BaseButton)
 app.component('ProgressCircular', ProgressCircular)
-app.provide('appDataBase', databaseManager)
+app.provide('appDataBase', appDataBase)
 getAuth().onAuthStateChanged((user) => {
   userStore.setAuthChecked(false)
   if (user) {
