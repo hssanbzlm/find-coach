@@ -7,7 +7,6 @@ import {
   query,
   get,
   orderByChild,
-  DataSnapshot,
 } from 'firebase/database'
 import axios from 'axios'
 import type { IDataBase } from './IDataBase'
