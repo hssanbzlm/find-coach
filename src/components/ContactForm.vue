@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, onMounted, ref, onUpdated } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, maxLength } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/User'
 import BaseAlert from './BaseAlert.vue'
@@ -25,7 +25,7 @@ const state = reactive({
   message: '',
 })
 const rules = {
-  message: { required },
+  message: { required, maxLength: maxLength(100) },
 }
 const { isError, isSentError, isSentLoading, isSuccess, executeSendEmail } =
   useSendEmail()
@@ -74,7 +74,14 @@ const cancelRequest = () => {
             class="input-errors"
             v-if="v$.message.$invalid && v$.message.$dirty"
           >
-            <span class="error-msg">The message is mandatory</span>
+            <span v-if="v$.message.required.$invalid" class="error-msg"
+              >The message is mandatory</span
+            >
+            <span
+              v-if="v$.message.maxLength && !v$.message.required.$invalid"
+              class="error-msg"
+              >{{ v$.message.maxLength.$message }}</span
+            >
           </div>
         </v-col>
       </v-row>
@@ -82,6 +89,7 @@ const cancelRequest = () => {
       <v-row no-gutters>
         <v-col>
           <BaseButton
+            :isDisabled="v$.$invalid"
             class="ma-2"
             color="#0277BD"
             textColor="text-white"

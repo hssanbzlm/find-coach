@@ -2,11 +2,13 @@
 const props = defineProps({
   color: String,
   textColor: String,
+  isDisabled: Boolean,
 })
 </script>
 
 <template>
   <v-btn
+    :disabled="isDisabled"
     :class="`${props.textColor}`"
     height="25"
     rounded="lg"
