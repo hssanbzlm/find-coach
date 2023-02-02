@@ -4,7 +4,6 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, maxLength } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/User'
-import BaseAlert from './BaseAlert.vue'
 import { useSendEmail } from '@/composables/useSendEmail'
 type CoachDetailsShape = {
   id: string
@@ -17,7 +16,6 @@ const router = useRouter()
 const userStore = useUserStore()
 const textArea = ref()
 const { email } = userStore.getUser!
-
 onMounted(() => {
   textArea.value.focus()
 })
@@ -30,8 +28,13 @@ const rules = {
 const { isError, isSentError, isSentLoading, isSuccess, executeSendEmail } =
   useSendEmail()
 const v$ = useVuelidate(rules, state)
+const TIMEOUT = 5
 onUpdated(() => {
-  if (isSuccess.value) router.push({ name: 'coaches' })
+  if (isSuccess.value) {
+    setTimeout(() => {
+      router.push({ name: 'coaches' })
+    }, TIMEOUT * 1000)
+  }
 })
 const sendRequest = () => {
   executeSendEmail(
@@ -69,6 +72,7 @@ const cancelRequest = () => {
             label="Message"
             required
             ref="textArea"
+            :disabled="isSentLoading"
           ></v-textarea>
           <div
             class="input-errors"
@@ -89,7 +93,7 @@ const cancelRequest = () => {
       <v-row no-gutters>
         <v-col>
           <BaseButton
-            :isDisabled="v$.$invalid"
+            :isDisabled="v$.$invalid || isSentLoading"
             class="ma-2"
             color="#0277BD"
             textColor="text-white"
@@ -108,7 +112,10 @@ const cancelRequest = () => {
     </v-container>
   </v-form>
   <div v-if="isSuccess">
-    <BaseAlert message="your request has been sent" type="success" />
+    <BaseAlert
+      :message="`Your request has been sent successfully! You will be redirected to coaches page in ${TIMEOUT} seconds.`"
+      type="success"
+    />
   </div>
   <div v-if="isSentLoading && !isSuccess && !isError && !isSentError">
     <BaseAlert message="your request is being sent" type="info" />

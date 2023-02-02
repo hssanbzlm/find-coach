@@ -59,7 +59,9 @@ appDataBase
         </template>
       </RequestTimeline>
     </v-timeline>
-    <div v-else>you havent sent yet any request!</div>
+    <div class="d-flex justify-center mt-5" v-else>
+      <BaseAlert type="info" message="You have not sent any request yet" />
+    </div>
   </div>
   <div v-else>
     <div v-if="loading">
