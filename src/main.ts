@@ -11,6 +11,8 @@ import type { User } from './types/User'
 import BaseButton from '@/components/BaseButton.vue'
 import ProgressCircular from '@/components/ProgressCircular.vue'
 import { ConcreteFirebaseCreator } from './db/ConcreteFirebaseCreator'
+import BaseAlert from '@/components/BaseAlert.vue'
+
 const firebaseCreator = new ConcreteFirebaseCreator()
 const appDataBase = firebaseCreator.factoryMethod()
 const app = createApp(App)
@@ -20,6 +22,7 @@ app.use(vuetify)
 app.use(router)
 app.component('BaseButton', BaseButton)
 app.component('ProgressCircular', ProgressCircular)
+app.component('BaseAlert', BaseAlert)
 app.provide('appDataBase', appDataBase)
 getAuth().onAuthStateChanged((user) => {
   userStore.setAuthChecked(false)
