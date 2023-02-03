@@ -7,8 +7,8 @@ import {
   query,
   get,
   orderByChild,
+  set,
 } from 'firebase/database'
-import axios from 'axios'
 import type { IDataBase } from './IDataBase'
 export class FirebaseDb implements IDataBase {
   private firebaseConfig = {
@@ -20,7 +20,6 @@ export class FirebaseDb implements IDataBase {
     appId: '1:236680732644:web:22988c0324761ff27231f1',
   }
   private db: Database
-  private firebaseDbURL = import.meta.env.VITE_DB_URL
   constructor() {
     initializeApp(this.firebaseConfig)
     this.db = getDatabase()
@@ -34,6 +33,10 @@ export class FirebaseDb implements IDataBase {
     return get(requestQuery)
   }
   addRequest(data: any) {
-    return axios.post(this.firebaseDbURL + '/requests.json', data)
+    return set(ref(this.db, 'requests/' + data.time), data)
+  }
+  getCoaches() {
+    const requestQuery = query(ref(this.db, 'coaches/'))
+    return get(requestQuery)
   }
 }

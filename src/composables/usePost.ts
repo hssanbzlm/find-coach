@@ -10,11 +10,9 @@ export function usePost() {
     isLoading.value = true
     appDataBase
       .addRequest(data)
-      .then((response) => {
+      .then(() => {
         isLoading.value = false
-        response.status === 200
-          ? (isSuccess.value = true)
-          : (isError.value = true)
+        isSuccess.value = true
       })
       .catch(() => {
         isLoading.value = false

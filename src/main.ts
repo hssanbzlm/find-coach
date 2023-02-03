@@ -13,9 +13,10 @@ import ProgressCircular from '@/components/ProgressCircular.vue'
 import { ConcreteFirebaseCreator } from './db/ConcreteFirebaseCreator'
 import BaseAlert from '@/components/BaseAlert.vue'
 
+const app = createApp(App)
 const firebaseCreator = new ConcreteFirebaseCreator()
 const appDataBase = firebaseCreator.factoryMethod()
-const app = createApp(App)
+app.provide('appDataBase', appDataBase)
 app.use(createPinia())
 const userStore = useUserStore()
 app.use(vuetify)
@@ -23,12 +24,11 @@ app.use(router)
 app.component('BaseButton', BaseButton)
 app.component('ProgressCircular', ProgressCircular)
 app.component('BaseAlert', BaseAlert)
-app.provide('appDataBase', appDataBase)
-getAuth().onAuthStateChanged((user) => {
+getAuth().onAuthStateChanged((user: unknown) => {
   userStore.setAuthChecked(false)
   if (user) {
-    const { displayName, email, photoURL } = user as User
-    userStore.setUser({ displayName, email, photoURL })
+    const { displayName, email, photoURL, accessToken } = user as User
+    userStore.setUser({ displayName, email, photoURL, accessToken })
     router.push({ name: 'coaches' })
   } else {
     userStore.setUser(null)
