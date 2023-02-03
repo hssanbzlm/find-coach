@@ -11,10 +11,10 @@ const signIn = () => {
   const auth = getAuth()
   signInWithPopup(auth, provider)
     .then((result) => {
-      const user = result.user as unknown
+      const user = result.user
       if (user) {
-        const { displayName, email, photoURL, accessToken } = user as User
-        userStore.setUser({ displayName, email, photoURL, accessToken })
+        const { displayName, email, photoURL } = user as User
+        userStore.setUser({ displayName, email, photoURL })
         router.push({ name: 'coaches' })
       }
     })

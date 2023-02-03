@@ -27,8 +27,8 @@ app.component('BaseAlert', BaseAlert)
 getAuth().onAuthStateChanged((user: unknown) => {
   userStore.setAuthChecked(false)
   if (user) {
-    const { displayName, email, photoURL, accessToken } = user as User
-    userStore.setUser({ displayName, email, photoURL, accessToken })
+    const { displayName, email, photoURL } = user as User
+    userStore.setUser({ displayName, email, photoURL })
     router.push({ name: 'coaches' })
   } else {
     userStore.setUser(null)
