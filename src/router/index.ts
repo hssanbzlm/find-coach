@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import TheCoaches from '@/views/TheCoaches.vue'
-import TheNavbarVue from '@/components/TheNavbar.vue'
 import { useUserStore } from '@/stores/User'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,13 +10,13 @@ const router = createRouter({
     },
     {
       path: '/',
-      component: TheNavbarVue,
+      component: () => import('@/components/TheNavbar.vue'),
       children: [
         {
           name: 'coaches',
           path: '/coaches',
           alias: '/',
-          component: TheCoaches,
+          component: () => import('@/views/TheCoaches.vue'),
         },
         {
           name: 'contact',
