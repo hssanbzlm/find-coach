@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import type { Coach } from '@/types/Coach'
+import { inject } from 'vue'
+import type { IDataBase } from '@/db/IDataBase'
+import type { DataSnapshot } from 'firebase/database'
+
 export const useCoachesStore = defineStore('coaches', {
   state: () => ({ coaches: [] as Coach[], loaded: false }),
   getters: {
@@ -14,15 +17,12 @@ export const useCoachesStore = defineStore('coaches', {
   },
   actions: {
     fetchCoaches() {
+      const appDataBase: IDataBase = inject('appDataBase')!
       this.loaded = false
-      axios.get(import.meta.env.VITE_DB_URL + '/coaches.json').then((res) => {
-        const coacheIds = Object.keys(res.data)
-        this.coaches = Object.values(res.data as Coach[]).map(
-          (coach, index) => ({
-            ...coach,
-            id: coacheIds[index],
-          })
-        )
+      appDataBase.getCoaches().then((snapshot: DataSnapshot) => {
+        snapshot.forEach((coach) => {
+          this.coaches.push({ id: coach.key, ...coach.val() })
+        })
         this.loaded = true
       })
     },
