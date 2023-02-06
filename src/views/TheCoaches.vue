@@ -9,7 +9,6 @@ import { useCoachesStore } from '@/stores/Coaches'
 import { computed, ref } from 'vue'
 const areas = ref(['frontend', 'backend', 'career'])
 const router = useRouter()
-const store = useCoachesStore()
 const coachStore = useCoachesStore()
 const page = ref(1)
 const pageSize = 3
@@ -18,7 +17,7 @@ if (coachStore.loaded == false) {
 }
 
 const getCoaches = computed(() => {
-  return store.getCoachesState
+  return coachStore.getCoachesState
 })
 const filtredCoaches = computed(() => {
   return getCoaches.value.filter((coach: Coach) => {
