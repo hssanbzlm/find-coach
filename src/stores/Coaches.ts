@@ -5,7 +5,12 @@ import type { IDataBase } from '@/db/IDataBase'
 import type { DataSnapshot } from 'firebase/database'
 
 export const useCoachesStore = defineStore('coaches', {
-  state: () => ({ coaches: [] as Coach[], loaded: false }),
+  state: () => ({
+    coaches: [] as Coach[],
+    loaded: false,
+    error: false,
+    loading: false,
+  }),
   getters: {
     getCoachesState(state) {
       return state.coaches
@@ -19,12 +24,21 @@ export const useCoachesStore = defineStore('coaches', {
     fetchCoaches() {
       const appDataBase: IDataBase = inject('appDataBase')!
       this.loaded = false
-      appDataBase.getCoaches().then((snapshot: DataSnapshot) => {
-        snapshot.forEach((coach) => {
-          this.coaches.push({ id: coach.key, ...coach.val() })
+      this.loading = true
+      appDataBase
+        .getCoaches()
+        .then((snapshot: DataSnapshot) => {
+          snapshot.forEach((coach) => {
+            this.coaches.push({ id: coach.key, ...coach.val() })
+          })
+          this.loaded = true
+          this.loading = false
         })
-        this.loaded = true
-      })
+        .catch(() => {
+          this.error = true
+          this.loading = false
+          this.loaded = false
+        })
     },
   },
 })

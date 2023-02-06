@@ -7,20 +7,19 @@ import { chipColor } from '@/utils/utils'
 import type { area, Coach } from '@/types/Coach'
 import { useCoachesStore } from '@/stores/Coaches'
 import { computed, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import BaseAlert from '@/components/BaseAlert.vue'
 const areas = ref(['frontend', 'backend', 'career'])
 const router = useRouter()
 const coachStore = useCoachesStore()
+const { loaded, loading, error, coaches } = storeToRefs(coachStore)
 const page = ref(1)
 const pageSize = 3
-if (coachStore.loaded == false) {
+if (!loaded.value) {
   coachStore.fetchCoaches()
 }
-
-const getCoaches = computed(() => {
-  return coachStore.getCoachesState
-})
 const filtredCoaches = computed(() => {
-  return getCoaches.value.filter((coach: Coach) => {
+  return coaches.value.filter((coach: Coach) => {
     return coach.areas.some((area: area) => areas.value.includes(area))
   })
 })
@@ -45,7 +44,7 @@ const clickContact = (id: string) => {
 </script>
 
 <template>
-  <div v-if="coachStore.loaded">
+  <div v-if="loaded">
     <CoachFilter @update-areas="updateArea" />
     <div v-for="coach in showedCoaches" :key="coach.id">
       <CoachDetails
@@ -94,8 +93,11 @@ const clickContact = (id: string) => {
       ></v-pagination>
     </div>
   </div>
-  <div v-else>
+  <div v-else-if="loading">
     <ProgressCircular />
+  </div>
+  <div v-else-if="error">
+    <BaseAlert message="error while loading coaches" type="error" />
   </div>
 </template>
 
