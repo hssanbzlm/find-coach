@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, onMounted, ref, onUpdated } from 'vue'
+import { reactive, onMounted, ref, onUpdated, onUnmounted } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, maxLength } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
@@ -29,9 +29,10 @@ const { isError, isSentError, isSentLoading, isSuccess, executeSendEmail } =
   useSendEmail()
 const v$ = useVuelidate(rules, state)
 const TIMEOUT = 5
+let myTimeout: number
 onUpdated(() => {
   if (isSuccess.value) {
-    setTimeout(() => {
+    myTimeout = setTimeout(() => {
       router.push({ name: 'coaches' })
     }, TIMEOUT * 1000)
   }
@@ -48,6 +49,10 @@ const sendRequest = () => {
 const cancelRequest = () => {
   router.back()
 }
+onUnmounted(() => {
+  console.log('HELLO')
+  clearTimeout(myTimeout)
+})
 </script>
 
 <template>
