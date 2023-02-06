@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, defineAsyncComponent } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
@@ -8,10 +8,7 @@ import vuetify from './plugins/vuetify'
 import { getAuth } from '@firebase/auth'
 import { useUserStore } from './stores/User'
 import type { User } from './types/User'
-import BaseButton from '@/components/BaseButton.vue'
-import ProgressCircular from '@/components/ProgressCircular.vue'
 import { ConcreteFirebaseCreator } from './db/ConcreteFirebaseCreator'
-import BaseAlert from '@/components/BaseAlert.vue'
 
 const app = createApp(App)
 const firebaseCreator = new ConcreteFirebaseCreator()
@@ -21,9 +18,18 @@ app.use(createPinia())
 const userStore = useUserStore()
 app.use(vuetify)
 app.use(router)
-app.component('BaseButton', BaseButton)
-app.component('ProgressCircular', ProgressCircular)
-app.component('BaseAlert', BaseAlert)
+app.component(
+  'BaseButton',
+  defineAsyncComponent(() => import('@/components/BaseButton.vue'))
+)
+app.component(
+  'ProgressCircular',
+  defineAsyncComponent(() => import('@/components/ProgressCircular.vue'))
+)
+app.component(
+  'BaseAlert',
+  defineAsyncComponent(() => import('@/components/BaseAlert.vue'))
+)
 getAuth().onAuthStateChanged((user: unknown) => {
   userStore.setAuthChecked(false)
   if (user) {
