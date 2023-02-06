@@ -18,9 +18,7 @@ const signIn = () => {
         router.push({ name: 'coaches' })
       }
     })
-    .catch((error) => {
-      console.log('errorr ', error)
-    })
+    .catch(() => {})
 }
 </script>
 

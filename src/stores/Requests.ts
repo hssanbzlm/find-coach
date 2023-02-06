@@ -22,7 +22,6 @@ export const useRequestStore = defineStore('requests', {
       const { email } = useUserStore().getUser!
       this.loaded = false
       this.loading = true
-      console.log('appDataBase ', appDataBase)
       appDataBase
         .getRequests(email)
         .then((snapshot: DataSnapshot) => {

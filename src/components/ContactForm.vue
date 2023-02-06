@@ -50,7 +50,6 @@ const cancelRequest = () => {
   router.back()
 }
 onUnmounted(() => {
-  console.log('HELLO')
   clearTimeout(myTimeout)
 })
 </script>

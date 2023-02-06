@@ -36,7 +36,6 @@ const updateArea = (area: area[]) => {
   areas.value = area
 }
 const clickDetails = () => {
-  console.log('click handled')
 }
 const clickContact = (id: string) => {
   router.push({ name: 'contact', params: { coachId: id } })
