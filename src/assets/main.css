@@ -6,3 +6,10 @@ html{
 .v-btn span{
     text-transform:none
 }
+
+.progress-loader {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    top: 25vh;
+  }

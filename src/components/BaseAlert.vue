@@ -3,13 +3,16 @@ type alertType = 'error' | 'success' | 'warning' | 'info'
 type propsShape = {
   type: alertType
   message: string
+  width: string
 }
 const props = defineProps<propsShape>()
 </script>
 
 <template>
   <div>
-    <v-alert :type="props.type">{{ props.message }}</v-alert>
+    <v-alert :width="props.width" :type="props.type">{{
+      props.message
+    }}</v-alert>
   </div>
 </template>
 

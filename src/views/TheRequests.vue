@@ -52,14 +52,19 @@ function loadContent() {
       </RequestTimeline>
     </v-timeline>
     <div v-else class="d-flex justify-center mt-5">
-      <BaseAlert type="info" message="You have not sent any request yet" />
+      <BaseAlert
+        width="25vw"
+        type="info"
+        message="You have not sent any request yet"
+      />
     </div>
   </div>
-  <div v-else-if="loading">
+  <div class="progress-loader" v-else-if="loading">
     <ProgressCircular />
   </div>
-  <div v-else-if="error">
+  <div class="d-flex justify-center mt-2" v-else-if="error">
     <BaseAlert
+      width="25vw"
       type="error"
       message="Error while loading requests. Please come back later"
     />

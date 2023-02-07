@@ -4,5 +4,6 @@
     model-value="20"
     :size="128"
     :width="12"
+    indeterminate
   ></v-progress-circular>
 </template>

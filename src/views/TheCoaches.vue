@@ -35,8 +35,7 @@ let showedCoaches = computed(() => {
 const updateArea = (area: area[]) => {
   areas.value = area
 }
-const clickDetails = () => {
-}
+const clickDetails = () => {}
 const clickContact = (id: string) => {
   router.push({ name: 'contact', params: { coachId: id } })
 }
@@ -92,11 +91,15 @@ const clickContact = (id: string) => {
       ></v-pagination>
     </div>
   </div>
-  <div v-else-if="loading">
+  <div class="progress-loader" v-else-if="loading">
     <ProgressCircular />
   </div>
-  <div v-else-if="error">
-    <BaseAlert message="error while loading coaches" type="error" />
+  <div class="d-flex justify-center mt-2" v-else-if="error">
+    <BaseAlert
+      width="25vw"
+      message="error while loading coaches"
+      type="error"
+    />
   </div>
 </template>
 
