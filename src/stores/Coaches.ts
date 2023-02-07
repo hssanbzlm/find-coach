@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia'
 import type { Coach } from '@/types/Coach'
-import { inject } from 'vue'
-import type { IDataBase } from '@/db/IDataBase'
 import type { DataSnapshot } from 'firebase/database'
 
 export const useCoachesStore = defineStore('coaches', {
@@ -22,10 +20,9 @@ export const useCoachesStore = defineStore('coaches', {
   },
   actions: {
     fetchCoaches() {
-      const appDataBase: IDataBase = inject('appDataBase')!
       this.loaded = false
       this.loading = true
-      appDataBase
+      this.appDataBase
         .getCoaches()
         .then((snapshot: DataSnapshot) => {
           snapshot.forEach((coach) => {

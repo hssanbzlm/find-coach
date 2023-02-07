@@ -9,12 +9,17 @@ import { getAuth } from '@firebase/auth'
 import { useUserStore } from './stores/User'
 import type { User } from './types/User'
 import { ConcreteFirebaseCreator } from './db/ConcreteFirebaseCreator'
+import { markRaw } from 'vue'
 
 const app = createApp(App)
 const firebaseCreator = new ConcreteFirebaseCreator()
 const appDataBase = firebaseCreator.factoryMethod()
 app.provide('appDataBase', appDataBase)
-app.use(createPinia())
+const pinia = createPinia()
+pinia.use(({ store }) => {
+  store.appDataBase = markRaw(appDataBase)
+})
+app.use(pinia)
 const userStore = useUserStore()
 app.use(vuetify)
 app.use(router)
