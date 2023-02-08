@@ -1,10 +1,10 @@
 import { sendEmail } from '@/plugins/email'
-import { usePost } from '@/composables/usePost'
+import { useAddRequest } from '@/composables/useAddRequest'
 import { ref } from 'vue'
 export function useSendEmail() {
   const isSentError = ref(false)
   const isSentLoading = ref(false)
-  const { executePostRequest, isSuccess, isError } = usePost()
+  const { executeAddRequest, isSuccess, isError } = useAddRequest()
 
   const executeSendEmail = (
     to_name: string,
@@ -16,7 +16,7 @@ export function useSendEmail() {
     isSentLoading.value = true
     sendEmail(to_name, message, to_email)
       .then(() => {
-        executePostRequest({ message, sender, coachId, time: Date.now() })
+        executeAddRequest({ message, sender, coachId, time: Date.now() })
       })
       .catch(() => {
         isSentLoading.value = false
