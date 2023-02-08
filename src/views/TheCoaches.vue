@@ -9,29 +9,26 @@ import { useCoachesStore } from '@/stores/Coaches'
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import BaseAlert from '@/components/BaseAlert.vue'
+import { usePagination } from '@/composables/usePagination'
 const areas = ref(['frontend', 'backend', 'career'])
 const router = useRouter()
 const coachStore = useCoachesStore()
 const { loaded, loading, error, coaches } = storeToRefs(coachStore)
-const page = ref(1)
-const pageSize = 3
-if (!loaded.value) {
-  coachStore.fetchCoaches()
-}
+
 const filtredCoaches = computed(() => {
   return coaches.value.filter((coach: Coach) => {
     return coach.areas.some((area: area) => areas.value.includes(area))
   })
 })
-const length = computed(() => {
-  return Math.ceil(filtredCoaches.value.length / pageSize)
-})
-let showedCoaches = computed(() => {
-  return filtredCoaches.value.slice(
-    pageSize * page.value - pageSize,
-    pageSize * page.value
-  )
-})
+const pageSize = 3
+const { startingPage, numberOfPagination, currentShownData } = usePagination(
+  filtredCoaches,
+  pageSize
+)
+
+if (!loaded.value) {
+  coachStore.fetchCoaches()
+}
 const updateArea = (area: area[]) => {
   areas.value = area
 }
@@ -44,7 +41,7 @@ const clickContact = (id: string) => {
 <template>
   <div v-if="loaded">
     <CoachFilter @update-areas="updateArea" />
-    <div v-for="coach in showedCoaches" :key="coach.id">
+    <div v-for="coach in currentShownData" :key="coach.id">
       <CoachDetails
         :lastName="coach.lastName"
         :firstName="coach.firstName"
@@ -85,8 +82,8 @@ const clickContact = (id: string) => {
     </div>
     <div class="text-center">
       <v-pagination
-        v-model="page"
-        :length="length"
+        v-model="startingPage"
+        :length="numberOfPagination"
         v-if="filtredCoaches.length > pageSize"
       ></v-pagination>
     </div>
