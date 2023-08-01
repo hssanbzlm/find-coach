@@ -6,9 +6,9 @@ export const sendEmail = (
   to_email: string
 ) => {
   return emailjs.send(
-    'YOUR_SERVICE_ID',
-    'YOUR_TEMPLATE_ID',
+    import.meta.env.VITE_EMAIL_SERVICE_ID,
+    import.meta.env.VITE_EMAIL_TEMPLATE_ID,
     { to_name, to_email, message },
-    'YOUR_PRIVATE_KEY'
+    import.meta.env.VITE_EMAIL_PUBLIC_KEY
   )
 }
