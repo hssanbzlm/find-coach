@@ -41,7 +41,10 @@ const clickContact = (id: string) => {
 <template>
   <div v-if="loaded">
     <CoachFilter @update-areas="updateArea" />
-    <div v-for="coach in currentShownData" :key="coach.id">
+    <div class="d-flex justify-center mt-5" v-if="currentShownData.length == 0">
+      Please choose another filter
+    </div>
+    <div v-else v-for="coach in currentShownData" :key="coach.id">
       <CoachDetails
         :lastName="coach.lastName"
         :firstName="coach.firstName"
