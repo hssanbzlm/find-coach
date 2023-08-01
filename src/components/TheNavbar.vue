@@ -4,11 +4,13 @@ import type { Route } from '@/types/Route'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/User'
 import { getAuth } from '@firebase/auth'
+import { useRequestStore } from '@/stores/Requests'
 
 const drawer = ref(true)
 const rail = ref(true)
 const router = useRouter()
 const userStore = useUserStore()
+const requestStore = useRequestStore()
 const { displayName, photoURL } = userStore.getUser!
 const routes: Route[] = [
   {
@@ -27,6 +29,7 @@ const logout = () => {
   getAuth()
     .signOut()
     .then(() => {
+      requestStore.initState()
       router.push({ name: 'Auth' })
     })
 }
