@@ -24,24 +24,27 @@ const signIn = () => {
 
 <template>
   <div class="auth-container">
-    <div class="w-100 bg-deep-purple-lighten-5 text-center title-opacity">
-      <h1 class="text-font pa-4">Find your coach here !</h1>
+    <div class="content-container h-100 w-50">
+      <div
+        class="w-100 font-weight-black text-black pa-4 text-sm-h6 text-md-h4 text-left"
+      >
+        You can easily browse through a wide range of coaches and find the one
+        that best suits your needs.
+        <div
+          class="w-100 font-weight-black text-cyan-darken-4 pa-2 text-sm-h6 text-md-h5 text-left"
+        >
+          Find Your Coach !
+        </div>
+      </div>
+      <BaseButton
+        @click="signIn"
+        color="red"
+        class="text-font d-flex justify-center"
+      >
+        <v-icon class="mr-5"> mdi-gmail </v-icon>
+        Connect with gmail
+      </BaseButton>
     </div>
-
-    <div
-      class="w-50 font-weight-bold pa-4 rounded-xl bg-deep-purple-lighten-5 description-opacity"
-    >
-      Our app is designed to help you connect with experienced coaches who can
-      help you achieve your goals. With our app, you can easily browse through a
-      wide range of coaches and find the one that best suits your needs. Our
-      powerful filtering system allows you to search for coaches by area of
-      expertise. Once you find a coach you're interested in, you can view their
-      detailed profile.
-    </div>
-    <BaseButton @click="signIn" color="red" class="text-font">
-      <v-icon class="mr-5"> mdi-gmail </v-icon>
-      Connect with gmail
-    </BaseButton>
   </div>
 </template>
 
@@ -56,11 +59,13 @@ const signIn = () => {
   height: 100vh;
   background: linear-gradient(
       to right,
-      #000000 13%,
-      rgba(128, 128, 128, 0.1) 50%
+      #ffffff 46%,
+      rgba(128, 128, 128, 0.01) 60%
     ),
     url('@/assets/signin-bg.jpg');
   background-size: cover;
+}
+.content-container {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
