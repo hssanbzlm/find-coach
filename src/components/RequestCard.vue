@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 <template>
   <v-card class="card-width">
-    <v-card-title class="bg-purple-lighten-2">
+    <v-card-title class="bg-cyan-darken-4">
       <h5 class="font-weight-light">
         <slot name="coach-name"></slot>
       </h5>

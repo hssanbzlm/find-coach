@@ -36,7 +36,6 @@ function loadContent() {
     <v-timeline v-if="requests.length > 0">
       <RequestTimeline
         v-for="request in requests"
-        dot-color="purple-lighten-2"
         fill-dot
         :key="request.coachId"
       >

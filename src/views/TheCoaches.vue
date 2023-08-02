@@ -55,10 +55,10 @@ const clickContact = (id: string) => {
           <img :src="coach.img" alt="Coach image" width="50" height="45" />
         </template>
         <template v-slot:btn-group>
-          <div class="d-flex justify-end">
+          <div class="d-flex justify-end pa-1">
             <BaseButton
               textColor="text-white"
-              color="#385F73"
+              color="cyan-darken-4"
               @click="clickContact(coach.id)"
             >
               Contact me

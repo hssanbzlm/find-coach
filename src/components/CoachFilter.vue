@@ -7,10 +7,8 @@ const emits = defineEmits(['update-areas'])
 <template>
   <v-row justify="center" class="mt-2">
     <v-col cols="8" sm="4" md="7">
-      <v-card color="#385F73" theme="dark">
-        <v-card-title class="text-h5">
-          Select your coach by expertise area
-        </v-card-title>
+      <v-card color="cyan-darken-4" theme="dark">
+        <v-card-title class="text-h5"> Expertise area: </v-card-title>
         <v-row class="ml-2 mt-1 d-flex justify-end">
           <v-checkbox
             v-model="areas"

@@ -2,7 +2,7 @@
 import RequestCard from '@/components/RequestCard.vue'
 </script>
 <template>
-  <v-timeline-item dot-color="purple-lighten-2" fill-dot>
+  <v-timeline-item dot-color="cyan-darken-4" size="small" fill-dot>
     <RequestCard>
       <template v-slot:coach-name>
         <slot name="coach-name"></slot>
