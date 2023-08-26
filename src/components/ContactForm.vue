@@ -32,7 +32,7 @@ const TIMEOUT = 5
 let myTimeout: number
 onUpdated(() => {
   if (isSuccess.value) {
-    myTimeout = setTimeout(() => {
+    myTimeout = window.setTimeout(() => {
       router.push({ name: 'coaches' })
     }, TIMEOUT * 1000)
   }
