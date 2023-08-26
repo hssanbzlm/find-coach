@@ -25,20 +25,11 @@ function loadContent() {
 </script>
 <template>
   <div v-if="loaded">
-    <BaseButton
-      class="mt-5 ml-5"
-      color="white"
-      textColor="black"
-      @Click="loadContent"
-    >
+    <BaseButton class="mt-5 ml-5" color="white" textColor="black" @Click="loadContent">
       Refresh
     </BaseButton>
     <v-timeline v-if="requests.length > 0">
-      <RequestTimeline
-        v-for="request in requests"
-        fill-dot
-        :key="request.coachId"
-      >
+      <RequestTimeline v-for="request in requests" fill-dot :key="request.coachId">
         <template v-slot:coach-name>
           {{ getCoachDetails(request.coachId) }}
         </template>
@@ -51,22 +42,14 @@ function loadContent() {
       </RequestTimeline>
     </v-timeline>
     <div v-else class="d-flex justify-center mt-5">
-      <BaseAlert
-        width="25vw"
-        type="info"
-        message="You have not sent any request yet"
-      />
+      <BaseAlert width="25vw" type="info" message="You have not sent any request yet" />
     </div>
   </div>
   <div class="progress-loader" v-else-if="loading">
     <ProgressCircular />
   </div>
   <div class="d-flex justify-center mt-2" v-else-if="error">
-    <BaseAlert
-      width="25vw"
-      type="error"
-      message="Error while loading requests. Please come back later"
-    />
+    <BaseAlert width="25vw" type="error" message="Error while loading requests. Please come back later" />
   </div>
 </template>
 <style scoped></style>
