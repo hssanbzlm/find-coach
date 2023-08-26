@@ -5,15 +5,18 @@ import App from './App.vue'
 import router from './router'
 import './assets/main.css'
 import vuetify from './plugins/vuetify'
-import { getAuth } from '@firebase/auth'
 import { useUserStore } from './stores/User'
 import type { User } from './types/User'
-import { ConcreteFirebaseCreator } from './db/ConcreteFirebaseCreator'
+import { ConcreteDbCreator } from './db/ConcreteDbCreator'
 import { markRaw } from 'vue'
+import { FireBaseAuth } from './Auth/FireBaseAuth'
 
 const app = createApp(App)
-const firebaseCreator = new ConcreteFirebaseCreator()
-const appDataBase = firebaseCreator.factoryMethod()
+const fireBaseAuth = new FireBaseAuth()
+const appDB = import.meta.env.VITE_APP_DB
+
+const appDataBase = new ConcreteDbCreator().createDb(appDB)
+
 app.provide('appDataBase', appDataBase)
 const pinia = createPinia()
 pinia.use(({ store }) => {
@@ -35,7 +38,7 @@ app.component(
   'BaseAlert',
   defineAsyncComponent(() => import('@/components/BaseAlert.vue'))
 )
-getAuth().onAuthStateChanged((user: unknown) => {
+fireBaseAuth.auth().onAuthStateChanged((user: unknown) => {
   userStore.setAuthChecked(false)
   if (user) {
     const { displayName, email, photoURL } = user as User

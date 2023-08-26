@@ -1,4 +1,3 @@
-import { initializeApp } from 'firebase/app'
 import {
   Database,
   getDatabase,
@@ -10,18 +9,14 @@ import {
   set,
 } from 'firebase/database'
 import type { IDataBase } from './IDataBase'
+import type { Coach } from '@/types/Coach'
+import type { Request } from '@/types/Request'
+// import { initializeApp } from 'firebase/app'
+
 export class FirebaseDb implements IDataBase {
-  private firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,
-    projectId: import.meta.env.VITE_FIREBASE_PROJECTID,
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGEBUCKET,
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  }
   private db: Database
   constructor() {
-    initializeApp(this.firebaseConfig)
+    //initializeApp(firebaseConfig)
     this.db = getDatabase()
   }
   getRequests(email: string) {
@@ -30,13 +25,37 @@ export class FirebaseDb implements IDataBase {
       orderByChild('sender'),
       equalTo(email as string)
     )
-    return get(requestQuery)
+    return new Promise((result, reject) => {
+      const data: Request[] = []
+      get(requestQuery)
+        .then((requestList) => {
+          requestList.forEach((request) => {
+            data.push({ id: request.key, ...request.val() })
+          })
+          result(data)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
-  addRequest(data: any) {
+  addRequest(data: Request) {
     return set(ref(this.db, 'requests/' + data.time), data)
   }
   getCoaches() {
     const requestQuery = query(ref(this.db, 'coaches/'))
-    return get(requestQuery)
+    return new Promise((result, reject) => {
+      const data: Coach[] = []
+      get(requestQuery)
+        .then((coachList) => {
+          coachList.forEach((coach) => {
+            data.push({ id: coach.key, ...coach.val() })
+          })
+          result(data)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
 }

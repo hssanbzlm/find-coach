@@ -1,5 +1,6 @@
 import type { IDataBase } from './IDataBase'
 
 export abstract class DbCreator {
-  public abstract factoryMethod(): IDataBase
+  //factory method
+  public abstract createDb(dbType: string): IDataBase
 }
