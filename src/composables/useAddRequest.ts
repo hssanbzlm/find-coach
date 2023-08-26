@@ -1,4 +1,5 @@
 import type { IDataBase } from '@/db/IDataBase'
+import type { Request } from '@/types/Request'
 import { ref, inject } from 'vue'
 export function useAddRequest() {
   const isLoading = ref(false)
@@ -6,7 +7,7 @@ export function useAddRequest() {
   const isSuccess = ref(false)
   const appDataBase: IDataBase = inject('appDataBase')!
 
-  const executeAddRequest = (data: Object) => {
+  const executeAddRequest = (data: Request) => {
     isLoading.value = true
     appDataBase
       .addRequest(data)
