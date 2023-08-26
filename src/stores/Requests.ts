@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-import type { DataSnapshot } from 'firebase/database'
 import { defineStore } from 'pinia'
 import { useUserStore } from './User'
 import type { Request } from '@/types/Request'
@@ -23,12 +21,11 @@ export const useRequestStore = defineStore('requests', {
       this.requests = []
       this.appDataBase
         .getRequests(email)
-        .then((snapshot: DataSnapshot) => {
-          if (snapshot.size > 0) {
-            snapshot.forEach((request) => {
-              this.requests.unshift(request.val())
-            })
-          }
+        .then((data: Request[]) => {
+          data.forEach((request) => {
+            this.requests.unshift(request)
+          })
+
           this.loaded = true
           this.loading = false
         })

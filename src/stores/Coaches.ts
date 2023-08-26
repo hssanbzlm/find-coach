@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import type { Coach } from '@/types/Coach'
-import type { DataSnapshot } from 'firebase/database'
 
 export const useCoachesStore = defineStore('coaches', {
   state: () => ({
@@ -24,9 +23,9 @@ export const useCoachesStore = defineStore('coaches', {
       this.loading = true
       this.appDataBase
         .getCoaches()
-        .then((snapshot: DataSnapshot) => {
-          snapshot.forEach((coach) => {
-            this.coaches.push({ id: coach.key, ...coach.val() })
+        .then((data: Coach[]) => {
+          data.forEach((coach: Coach) => {
+            this.coaches.push(coach)
           })
           this.loaded = true
           this.loading = false
